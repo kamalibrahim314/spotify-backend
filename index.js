@@ -16,7 +16,7 @@ connectCloudinary();
 app.use(cookieParser());
 
 app.use(cors({
-    origin: process.env.CLIENT_URL,
+    origin: process.env.CLIENT_URL || 'https://spotify-clone-69yg.vercel.app',
     credentials: true
 }));
 

@@ -15,22 +15,17 @@ connDB();
 connectCloudinary();
 app.use(cookieParser());
 
+const allowedOrigins = process.env.CLIENT_URL || [
+    'https://spotify-clone-69yg.vercel.app',
+    'http://localhost:5173',
+];
+
 app.use(cors({
     origin: function (origin, callback) {
-        if (!origin) return callback(null, true);
-
-        const allowedOrigins = process.env.CLIENT_URL || [
-            'https://spotify-clone-69yg.vercel.app',
-            'http://localhost:5173',
-        ];
-
-        if (allowedOrigins.includes(origin) ||
-            origin.endsWith('vercel.app') ||
-            origin.includes('localhost')) {
-            return callback(null, true);
+        if (allowedOrigins.indexOf(origin) !== -1) {
+            callback(null, true)
         } else {
-            console.log('CORS blocked for origin:', origin);
-            return callback(new Error('Not allowed by CORS'));
+            callback(new Error('Not allowed by CORS'))
         }
     },
     credentials: true,

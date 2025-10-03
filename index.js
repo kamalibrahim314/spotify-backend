@@ -20,8 +20,8 @@ app.use(cors({
         if (!origin) return callback(null, true);
 
         const allowedOrigins = process.env.CLIENT_URL || [
+            'https://spotify-clone-69yg.vercel.app',
             'http://localhost:5173',
-            'https://spotify-clone-69yg.vercel.app'
         ];
 
         if (allowedOrigins.indexOf(origin) !== -1 || origin.includes('localhost')) {

@@ -16,8 +16,23 @@ connectCloudinary();
 app.use(cookieParser());
 
 app.use(cors({
-    origin: process.env.CLIENT_URL || 'https://spotify-clone-69yg.vercel.app',
-    credentials: true
+    origin: function (origin, callback) {
+        if (!origin) return callback(null, true);
+
+        const allowedOrigins = process.env.CLIENT_URL || [
+            'http://localhost:5173',
+            'https://spotify-clone-69yg.vercel.app'
+        ];
+
+        if (allowedOrigins.indexOf(origin) !== -1 || origin.includes('localhost')) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Cookie']
 }));
 
 app.use(express.json());
@@ -28,3 +43,4 @@ app.use('/', router);
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
+

@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 export const connDB = async () => {
     try {
         const conn = await mongoose.connect(
-            process.env.MONGODB_URL || 'mongodb+srv://ibrahimkamal314_db_user:zCuLs53aUZlZ5cyP@cluster0.zfohi48.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0', {
+            process.env.MONGODB_URL || 'mongodb+srv://ibrahimkamal314_db_user:rEI1MzVnnIAB6t8Y@cluster0.zfohi48.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0', {
             useNewUrlParser: true,
             useUnifiedTopology: true,
         });

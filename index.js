@@ -24,10 +24,13 @@ app.use(cors({
             'http://localhost:5173',
         ];
 
-        if (allowedOrigins.indexOf(origin) !== -1 || origin.includes('localhost')) {
-            callback(null, true);
+        if (allowedOrigins.includes(origin) ||
+            origin.endsWith('vercel.app') ||
+            origin.includes('localhost')) {
+            return callback(null, true);
         } else {
-            callback(new Error('Not allowed by CORS'));
+            console.log('CORS blocked for origin:', origin);
+            return callback(new Error('Not allowed by CORS'));
         }
     },
     credentials: true,

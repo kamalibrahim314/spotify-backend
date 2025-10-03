@@ -15,28 +15,20 @@ connDB();
 connectCloudinary();
 app.use(cookieParser());
 
-app.use(cors({
-    origin: function (origin, callback) {
-        if (!origin) return callback(null, true);
-
-        const allowedOrigins = process.env.CLIENT_URL || [
-            'https://spotify-clone-69yg.vercel.app',
-            'http://localhost:5173',
-        ];
-
-        if (allowedOrigins.includes(origin) ||
-            origin.endsWith('vercel.app') ||
-            origin.includes('localhost')) {
-            return callback(null, true);
-        } else {
-            console.log('CORS blocked for origin:', origin);
-            return callback(new Error('Not allowed by CORS'));
-        }
+const corsOptions = {
+    origin(origin, cb) {
+        if (!origin) return cb(null, true); // Postman/health etc.
+        const ok = allowList.includes(origin) || isVercelPreview(origin);
+        cb(ok ? null : new Error('Not allowed by CORS'), ok);
     },
     credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'Cookie']
-}));
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Range'],
+    exposedHeaders: ['Content-Length', 'Content-Range'],
+    optionsSuccessStatus: 204
+};
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
 
 app.use(express.json());
 
